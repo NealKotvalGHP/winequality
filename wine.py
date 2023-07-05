@@ -66,6 +66,8 @@ e2_weight = e2_accuracy / (e1_accuracy + e2_accuracy)
 
 
 
+
+#ensemble^2
 ensembleEnsemble = VotingClassifier(estimators=[('e1', ensemble1), ('e2', ensemble2)], voting='hard', weights=[e1_weight, e2_weight])
 
 ensembleEnsemble.fit(X_train, y_train)
@@ -75,4 +77,26 @@ y_pred = ensembleEnsemble.predict(X_test)
 
 # Evaluate the accuracy of the ensemble
 accuracy = accuracy_score(y_test, y_pred)
-print("Accuracy:", accuracy)
+
+
+#ensemble^4
+
+ensembleEnsemble2 = VotingClassifier(estimators=[('e1', ensemble1), ('e2', ensemble2)], voting='hard', weights=[e1_weight, e2_weight])
+
+ensembleEnsemble2.fit(X_train, y_train)
+
+y2_pred = ensembleEnsemble2.predict(X_test)
+
+accuracy2 = accuracy_score(y_test, y_pred)
+
+
+# Calculate weights based on accuracies
+ee1_weight = accuracy / (accuracy + accuracy2)
+ee2_weight = accuracy2 / (accuracy + accuracy2)
+
+ensembleEnsembleEnsemble = VotingClassifier(estimators=[('ee1', ensembleEnsemble), ('ee2', ensembleEnsemble2)], voting='hard', weights=[ee1_weight, ee2_weight])
+ensembleEnsembleEnsemble.fit(X_train, y_train)
+yy_pred = ensembleEnsembleEnsemble.predict(X_test)
+
+accuracyAccuracy = accuracy_score(y_test, yy_pred)
+print(accuracyAccuracy)
